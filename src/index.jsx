@@ -1,12 +1,47 @@
-import { exec } from '@actions/exec'
-import * as core from '@actions/core'
-import * as artifact from '@actions/artifact'
+// import * as core from '@actions/core';
+// import { exec } from '@actions/exec';
+import { exec } from 'child_process';
+import fs from "fs";
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
-import fs from "fs"
 
-import { processDir } from "./process-dir.js"
-import { Tree } from "./Tree.tsx"
+import { processDir } from "./process-dir.js";
+import { Tree } from "./Tree.tsx";
+
+const config = {
+  root_path: '~/code/next.js',
+  max_depth: 9,
+  color_encoding: 'type',
+  excluded_paths: "node_modules,bower_components,dist,out,build,eject,.next,.netlify,.yarn,.git,.vscode,package-lock.json,yarn.lock",
+  excluded_globs: '',
+  branch: 'main',
+  output_file: './diagram.svg',
+}
+
+const core = {
+  getInput: (key) => {
+    return config[key]
+  },
+  setOutput: (key, value) => {
+    config[key] = value
+  },
+  setFailed: (message) => {
+    console.error(message)
+  },
+  info: (message) => {
+    console.log(message)
+  },
+  startGroup: (message) => {
+    console.log(`::group::${message}`)
+  },
+  endGroup: () => {
+    console.log(`::endgroup::`)
+  },
+  getBooleanInput: (key) => {
+    return config[key]
+  }
+}
+
 
 const main = async () => {
   core.info('[INFO] Usage https://github.com/githubocto/repo-visualizer#readme')
@@ -59,16 +94,16 @@ const main = async () => {
 
   core.setOutput('svg', componentCodeString)
 
-  await fs.writeFileSync(outputFile, componentCodeString)
+  fs.writeFileSync(outputFile, componentCodeString)
 
+  // await exec('git', ['add', outputFile])
 
-  await exec('git', ['add', outputFile])
-  const diff = await execWithOutput('git', ['status', '--porcelain', outputFile])
-  core.info(`diff: ${diff}`)
-  if (!diff) {
-    core.info('[INFO] No changes to the repo detected, exiting')
-    return
-  }
+  // const diff = await execWithOutput('git', ['status', '--porcelain', outputFile])
+  // core.info(`diff: ${diff}`)
+  // if (!diff) {
+  //   core.info('[INFO] No changes to the repo detected, exiting')
+  //   return
+  // }
 
   const shouldPush = core.getBooleanInput('should_push')
   if (shouldPush) {
@@ -87,16 +122,16 @@ const main = async () => {
     core.endGroup()
   }
 
-  const shouldUpload = core.getInput('artifact_name') !== ''
-  if (shouldUpload) {
-    core.startGroup('Upload diagram to artifacts')
-    const client = artifact.create()
-    const result = await client.uploadArtifact(core.getInput('artifact_name'), [outputFile], '.')
-    if (result.failedItems.length > 0) {
-      throw 'Artifact was not uploaded successfully.'
-    }
-    core.endGroup()
-  }
+  // const shouldUpload = core.getInput('artifact_name') !== ''
+  // if (shouldUpload) {
+  //   core.startGroup('Upload diagram to artifacts')
+  //   const client = artifact.create()
+  //   const result = await client.uploadArtifact(core.getInput('artifact_name'), [outputFile], '.')
+  //   if (result.failedItems.length > 0) {
+  //     throw 'Artifact was not uploaded successfully.'
+  //   }
+  //   core.endGroup()
+  // }
 
   console.log("All set!")
 }

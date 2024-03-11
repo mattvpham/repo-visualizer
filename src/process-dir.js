@@ -11,13 +11,13 @@ export const processDir = async (rootPath = "", excludedPaths = [], excludedGlob
 
 
   const getFileStats = async (path = "") => {
-    const stats = await fs.statSync(`./${path}`);
+    const stats = fs.statSync(`${path}`);
     const name = path.split("/").filter(Boolean).slice(-1)[0];
     const size = stats.size;
     const relativePath = path.slice(rootPath.length + 1);
     return {
       name,
-      path: relativePath,
+      path: `./${relativePath}`,
       size,
     };
   };
@@ -26,10 +26,10 @@ export const processDir = async (rootPath = "", excludedPaths = [], excludedGlob
     isFolder = true,
   ) => {
     try {
-      console.log("Looking in ", `./${path}`);
+      console.log("Looking in ", `${path}`);
 
       if (isFolder) {
-        const filesOrFolders = await fs.readdirSync(`./${path}`);
+        const filesOrFolders = fs.readdirSync(`${path}`);
         const children = [];
 
         for (const fileOrFolder of filesOrFolders) {
@@ -38,7 +38,7 @@ export const processDir = async (rootPath = "", excludedPaths = [], excludedGlob
             continue;
           }
 
-          const info = fs.statSync(`./${fullPath}`);
+          const info = fs.statSync(`${fullPath}`);
           const stats = await addItemToTree(
             fullPath,
             info.isDirectory(),
