@@ -11060,47 +11060,6 @@ var require_countBy = __commonJS({
   }
 });
 
-// node_modules/lodash/_baseExtremum.js
-var require_baseExtremum = __commonJS({
-  "node_modules/lodash/_baseExtremum.js"(exports2, module2) {
-    var isSymbol = require_isSymbol();
-    function baseExtremum(array2, iteratee, comparator) {
-      var index = -1, length = array2.length;
-      while (++index < length) {
-        var value = array2[index], current = iteratee(value);
-        if (current != null && (computed === void 0 ? current === current && !isSymbol(current) : comparator(current, computed))) {
-          var computed = current, result = value;
-        }
-      }
-      return result;
-    }
-    module2.exports = baseExtremum;
-  }
-});
-
-// node_modules/lodash/_baseGt.js
-var require_baseGt = __commonJS({
-  "node_modules/lodash/_baseGt.js"(exports2, module2) {
-    function baseGt(value, other) {
-      return value > other;
-    }
-    module2.exports = baseGt;
-  }
-});
-
-// node_modules/lodash/maxBy.js
-var require_maxBy = __commonJS({
-  "node_modules/lodash/maxBy.js"(exports2, module2) {
-    var baseExtremum = require_baseExtremum();
-    var baseGt = require_baseGt();
-    var baseIteratee = require_baseIteratee();
-    function maxBy2(array2, iteratee) {
-      return array2 && array2.length ? baseExtremum(array2, baseIteratee(iteratee, 2), baseGt) : void 0;
-    }
-    module2.exports = maxBy2;
-  }
-});
-
 // node_modules/lodash/_baseToPairs.js
 var require_baseToPairs = __commonJS({
   "node_modules/lodash/_baseToPairs.js"(exports2, module2) {
@@ -11167,6 +11126,100 @@ var require_toPairs = __commonJS({
 var require_entries = __commonJS({
   "node_modules/lodash/entries.js"(exports2, module2) {
     module2.exports = require_toPairs();
+  }
+});
+
+// node_modules/lodash/_isFlattenable.js
+var require_isFlattenable = __commonJS({
+  "node_modules/lodash/_isFlattenable.js"(exports2, module2) {
+    var Symbol2 = require_Symbol();
+    var isArguments = require_isArguments();
+    var isArray = require_isArray();
+    var spreadableSymbol = Symbol2 ? Symbol2.isConcatSpreadable : void 0;
+    function isFlattenable(value) {
+      return isArray(value) || isArguments(value) || !!(spreadableSymbol && value && value[spreadableSymbol]);
+    }
+    module2.exports = isFlattenable;
+  }
+});
+
+// node_modules/lodash/_baseFlatten.js
+var require_baseFlatten = __commonJS({
+  "node_modules/lodash/_baseFlatten.js"(exports2, module2) {
+    var arrayPush = require_arrayPush();
+    var isFlattenable = require_isFlattenable();
+    function baseFlatten(array2, depth, predicate, isStrict, result) {
+      var index = -1, length = array2.length;
+      predicate || (predicate = isFlattenable);
+      result || (result = []);
+      while (++index < length) {
+        var value = array2[index];
+        if (depth > 0 && predicate(value)) {
+          if (depth > 1) {
+            baseFlatten(value, depth - 1, predicate, isStrict, result);
+          } else {
+            arrayPush(result, value);
+          }
+        } else if (!isStrict) {
+          result[result.length] = value;
+        }
+      }
+      return result;
+    }
+    module2.exports = baseFlatten;
+  }
+});
+
+// node_modules/lodash/flatten.js
+var require_flatten = __commonJS({
+  "node_modules/lodash/flatten.js"(exports2, module2) {
+    var baseFlatten = require_baseFlatten();
+    function flatten2(array2) {
+      var length = array2 == null ? 0 : array2.length;
+      return length ? baseFlatten(array2, 1) : [];
+    }
+    module2.exports = flatten2;
+  }
+});
+
+// node_modules/lodash/_baseExtremum.js
+var require_baseExtremum = __commonJS({
+  "node_modules/lodash/_baseExtremum.js"(exports2, module2) {
+    var isSymbol = require_isSymbol();
+    function baseExtremum(array2, iteratee, comparator) {
+      var index = -1, length = array2.length;
+      while (++index < length) {
+        var value = array2[index], current = iteratee(value);
+        if (current != null && (computed === void 0 ? current === current && !isSymbol(current) : comparator(current, computed))) {
+          var computed = current, result = value;
+        }
+      }
+      return result;
+    }
+    module2.exports = baseExtremum;
+  }
+});
+
+// node_modules/lodash/_baseGt.js
+var require_baseGt = __commonJS({
+  "node_modules/lodash/_baseGt.js"(exports2, module2) {
+    function baseGt(value, other) {
+      return value > other;
+    }
+    module2.exports = baseGt;
+  }
+});
+
+// node_modules/lodash/maxBy.js
+var require_maxBy = __commonJS({
+  "node_modules/lodash/maxBy.js"(exports2, module2) {
+    var baseExtremum = require_baseExtremum();
+    var baseGt = require_baseGt();
+    var baseIteratee = require_baseIteratee();
+    function maxBy2(array2, iteratee) {
+      return array2 && array2.length ? baseExtremum(array2, baseIteratee(iteratee, 2), baseGt) : void 0;
+    }
+    module2.exports = maxBy2;
   }
 });
 
@@ -11342,59 +11395,6 @@ var require_uniqBy = __commonJS({
   }
 });
 
-// node_modules/lodash/_isFlattenable.js
-var require_isFlattenable = __commonJS({
-  "node_modules/lodash/_isFlattenable.js"(exports2, module2) {
-    var Symbol2 = require_Symbol();
-    var isArguments = require_isArguments();
-    var isArray = require_isArray();
-    var spreadableSymbol = Symbol2 ? Symbol2.isConcatSpreadable : void 0;
-    function isFlattenable(value) {
-      return isArray(value) || isArguments(value) || !!(spreadableSymbol && value && value[spreadableSymbol]);
-    }
-    module2.exports = isFlattenable;
-  }
-});
-
-// node_modules/lodash/_baseFlatten.js
-var require_baseFlatten = __commonJS({
-  "node_modules/lodash/_baseFlatten.js"(exports2, module2) {
-    var arrayPush = require_arrayPush();
-    var isFlattenable = require_isFlattenable();
-    function baseFlatten(array2, depth, predicate, isStrict, result) {
-      var index = -1, length = array2.length;
-      predicate || (predicate = isFlattenable);
-      result || (result = []);
-      while (++index < length) {
-        var value = array2[index];
-        if (depth > 0 && predicate(value)) {
-          if (depth > 1) {
-            baseFlatten(value, depth - 1, predicate, isStrict, result);
-          } else {
-            arrayPush(result, value);
-          }
-        } else if (!isStrict) {
-          result[result.length] = value;
-        }
-      }
-      return result;
-    }
-    module2.exports = baseFlatten;
-  }
-});
-
-// node_modules/lodash/flatten.js
-var require_flatten = __commonJS({
-  "node_modules/lodash/flatten.js"(exports2, module2) {
-    var baseFlatten = require_baseFlatten();
-    function flatten2(array2) {
-      var length = array2 == null ? 0 : array2.length;
-      return length ? baseFlatten(array2, 1) : [];
-    }
-    module2.exports = flatten2;
-  }
-});
-
 // node_modules/lodash/uniqueId.js
 var require_uniqueId = __commonJS({
   "node_modules/lodash/uniqueId.js"(exports2, module2) {
@@ -11480,9 +11480,6 @@ var processDir = async (rootPath = "", excludedPaths = [], excludedGlobs = []) =
   const tree = await addItemToTree(rootPath);
   return tree;
 };
-
-// src/Tree.tsx
-var import_react2 = __toModule(require_react());
 
 // node_modules/d3-array/src/ascending.js
 function ascending_default(a2, b) {
@@ -16555,10 +16552,40 @@ function transform(node) {
 
 // src/Tree.tsx
 var import_countBy = __toModule(require_countBy());
-var import_maxBy = __toModule(require_maxBy());
 var import_entries = __toModule(require_entries());
-var import_uniqBy = __toModule(require_uniqBy());
 var import_flatten = __toModule(require_flatten());
+var import_maxBy = __toModule(require_maxBy());
+var import_uniqBy = __toModule(require_uniqBy());
+var import_react2 = __toModule(require_react());
+
+// src/CircleText.tsx
+var import_uniqueId = __toModule(require_uniqueId());
+var import_react = __toModule(require_react());
+var CircleText = ({
+  r: r4 = 10,
+  rotate = 0,
+  text = "",
+  ...props2
+}) => {
+  const id2 = (0, import_react.useMemo)(() => (0, import_uniqueId.default)("CircleText--"), []);
+  return /* @__PURE__ */ import_react.default.createElement(import_react.default.Fragment, null, /* @__PURE__ */ import_react.default.createElement("path", {
+    fill: "none",
+    d: [
+      ["M", 0, r4].join(" "),
+      ["A", r4, r4, 0, 0, 1, 0, -r4].join(" "),
+      ["A", r4, r4, 0, 0, 1, 0, r4].join(" ")
+    ].join(" "),
+    id: id2,
+    transform: `rotate(${rotate})`,
+    style: { pointerEvents: "none" }
+  }), /* @__PURE__ */ import_react.default.createElement("text", {
+    textAnchor: "middle",
+    ...props2
+  }, /* @__PURE__ */ import_react.default.createElement("textPath", {
+    href: `#${id2}`,
+    startOffset: "50%"
+  }, text)));
+};
 
 // src/language-colors.json
 var bsl = "#814CCC";
@@ -16801,7 +16828,7 @@ var gap = "#0000cc";
 var gd = "#355570";
 var gi = "#0000cc";
 var tst = "#ca0f21";
-var md = "#083fa1";
+var md = "#DBCA00";
 var ged = "#003058";
 var glsl = "#5686a5";
 var fp = "#5686a5";
@@ -16917,7 +16944,6 @@ var prefs = "#d1dbe0";
 var properties = "#2A6277";
 var idr = "#b30000";
 var lidr = "#b30000";
-var gitignore = "#000000";
 var ijm = "#99AAFF";
 var iss = "#264b99";
 var isl = "#264b99";
@@ -16928,6 +16954,8 @@ var ijs = "#9EEDFF";
 var flex = "#DBCA00";
 var jflex = "#DBCA00";
 var json = "#292929";
+var template_json = "#292929";
+var plan_json = "#292929";
 var avsc = "#292929";
 var geojson = "#292929";
 var gltf = "#292929";
@@ -17414,6 +17442,13 @@ var thrift = "#D12127";
 var tu = "#cf142b";
 var twig = "#c1d026";
 var ts = "#0060ac";
+var module_ts = "#0060ac";
+var entity_ts = "#0060ac";
+var dataloader_ts = "#0060ac";
+var interface_ts = "#0060ac";
+var service_ts = "#0060ac";
+var repository_ts = "#0060ac";
+var spec_ts = "#cf142b";
 var upc = "#4e3617";
 var anim = "#222c37";
 var asset = "#222c37";
@@ -17969,7 +18004,6 @@ var language_colors_default = {
   properties,
   idr,
   lidr,
-  gitignore,
   ijm,
   iss,
   isl,
@@ -17980,6 +18014,8 @@ var language_colors_default = {
   flex,
   jflex,
   json,
+  "template.json": template_json,
+  "plan.json": plan_json,
   avsc,
   geojson,
   gltf,
@@ -18466,6 +18502,13 @@ var language_colors_default = {
   tu,
   twig,
   ts,
+  "module.ts": module_ts,
+  "entity.ts": entity_ts,
+  "dataloader.ts": dataloader_ts,
+  "interface.ts": interface_ts,
+  "service.ts": service_ts,
+  "repository.ts": repository_ts,
+  "spec.ts": spec_ts,
   upc,
   anim,
   asset,
@@ -18666,35 +18709,6 @@ var language_colors_default = {
   prw
 };
 
-// src/CircleText.tsx
-var import_uniqueId = __toModule(require_uniqueId());
-var import_react = __toModule(require_react());
-var CircleText = ({
-  r: r4 = 10,
-  rotate = 0,
-  text = "",
-  ...props2
-}) => {
-  const id2 = (0, import_react.useMemo)(() => (0, import_uniqueId.default)("CircleText--"), []);
-  return /* @__PURE__ */ import_react.default.createElement(import_react.default.Fragment, null, /* @__PURE__ */ import_react.default.createElement("path", {
-    fill: "none",
-    d: [
-      ["M", 0, r4].join(" "),
-      ["A", r4, r4, 0, 0, 1, 0, -r4].join(" "),
-      ["A", r4, r4, 0, 0, 1, 0, r4].join(" ")
-    ].join(" "),
-    id: id2,
-    transform: `rotate(${rotate})`,
-    style: { pointerEvents: "none" }
-  }), /* @__PURE__ */ import_react.default.createElement("text", {
-    textAnchor: "middle",
-    ...props2
-  }, /* @__PURE__ */ import_react.default.createElement("textPath", {
-    href: `#${id2}`,
-    startOffset: "50%"
-  }, text)));
-};
-
 // src/utils.ts
 var truncateString = (string = "", length = 20) => {
   return string.length > length + 3 ? string.substring(0, length) + "..." : string;
@@ -18739,7 +18753,13 @@ var numberOfCommitsAccessor = (d2) => {
   var _a;
   return ((_a = d2 == null ? void 0 : d2.commits) == null ? void 0 : _a.length) || 0;
 };
-var Tree = ({ data, filesChanged = [], maxDepth = 9, colorEncoding = "type", customFileColors }) => {
+var Tree = ({
+  data,
+  filesChanged = [],
+  maxDepth = 9,
+  colorEncoding = "type",
+  customFileColors
+}) => {
   const fileColors = { ...language_colors_default, ...customFileColors };
   const [selectedNodeId, setSelectedNodeId] = (0, import_react2.useState)(null);
   const cachedPositions = (0, import_react2.useRef)({});
@@ -18816,7 +18836,18 @@ var Tree = ({ data, filesChanged = [], maxDepth = 9, colorEncoding = "type", cus
     return children2.slice(0, maxChildren);
   }, [data, fileColors]);
   const selectedNode = selectedNodeId && packedData.find((d2) => d2.data.path === selectedNodeId);
-  const fileTypes = (0, import_uniqBy.default)(packedData.map((d2) => fileColors[d2.data.extension] && d2.data.extension)).sort().filter(Boolean);
+  const compareExtensionsHelper = (a2, b) => {
+    const aReversed = a2.reverse().join(".");
+    const bReversed = b.reverse().join(".");
+    const result = aReversed < bReversed ? -1 : 1;
+    console.log({ aReversed, bReversed, result });
+    return result;
+  };
+  const compareExtensions = (a2, b) => {
+    return compareExtensionsHelper(a2.split("."), b.split("."));
+  };
+  const fileTypes = (0, import_uniqBy.default)(packedData.map((d2) => fileColors[d2.data.extension] && d2.data.extension)).sort(compareExtensions).filter(Boolean);
+  console.log(fileTypes);
   return /* @__PURE__ */ import_react2.default.createElement("svg", {
     width,
     height,
@@ -19017,7 +19048,7 @@ var ColorLegend = ({ scale, extent, colorEncoding }) => {
 };
 var Legend = ({ fileTypes = [], fileColors }) => {
   return /* @__PURE__ */ import_react2.default.createElement("g", {
-    transform: `translate(${width - 60}, ${height - fileTypes.length * 15 - 20})`
+    transform: `translate(${width - 120}, ${height - fileTypes.length * 15 - 20})`
   }, fileTypes.map((extension, i) => /* @__PURE__ */ import_react2.default.createElement("g", {
     key: i,
     transform: `translate(0, ${i * 15})`
@@ -19051,7 +19082,7 @@ var processChild = (child, getColor, cachedOrders, i = 0, fileColors) => {
     children2 = children2[0].children;
   }
   const pathWithoutExtension = path == null ? void 0 : path.split(".").slice(0, -1).join(".");
-  const extension = name == null ? void 0 : name.split(".").slice(-1)[0];
+  const extension = name == null ? void 0 : name.split(".").slice(1).slice(-2).join(".");
   const hasExtension = !!fileColors[extension];
   if (isRoot && children2) {
     const looseChildren = children2 == null ? void 0 : children2.filter((d2) => {
@@ -19090,16 +19121,18 @@ var processChild = (child, getColor, cachedOrders, i = 0, fileColors) => {
 var reflowSiblings = (siblings, cachedPositions = {}, maxDepth, parentRadius, parentPosition) => {
   if (!siblings)
     return;
-  let items = [...siblings.map((d2) => {
-    var _a, _b;
-    return {
-      ...d2,
-      x: ((_a = cachedPositions[d2.data.path]) == null ? void 0 : _a[0]) || d2.x,
-      y: ((_b = cachedPositions[d2.data.path]) == null ? void 0 : _b[1]) || d2.y,
-      originalX: d2.x,
-      originalY: d2.y
-    };
-  })];
+  let items = [
+    ...siblings.map((d2) => {
+      var _a, _b;
+      return {
+        ...d2,
+        x: ((_a = cachedPositions[d2.data.path]) == null ? void 0 : _a[0]) || d2.x,
+        y: ((_b = cachedPositions[d2.data.path]) == null ? void 0 : _b[1]) || d2.y,
+        originalX: d2.x,
+        originalY: d2.y
+      };
+    })
+  ];
   const paddingScale = sqrt().domain([maxDepth, 1]).range([3, 8]).clamp(true);
   let simulation = simulation_default(items).force("centerX", x_default2(width / 2).strength(items[0].depth <= 2 ? 0.01 : 0)).force("centerY", y_default2(height / 2).strength(items[0].depth <= 2 ? 0.01 : 0)).force("centerX2", x_default2(parentPosition == null ? void 0 : parentPosition[0]).strength(parentPosition ? 0.3 : 0)).force("centerY2", y_default2(parentPosition == null ? void 0 : parentPosition[1]).strength(parentPosition ? 0.8 : 0)).force("x", x_default2((d2) => {
     var _a;
@@ -19137,17 +19170,17 @@ var reflowSiblings = (siblings, cachedPositions = {}, maxDepth, parentRadius, pa
     return newD;
   };
   for (const item of items) {
-    const itemCachedPosition = cachedPositions[item.data.path] || [item.x, item.y];
+    const itemCachedPosition = cachedPositions[item.data.path] || [
+      item.x,
+      item.y
+    ];
     const itemPositionDiffFromCached = [
       item.x - itemCachedPosition[0],
       item.y - itemCachedPosition[1]
     ];
     if (item.children) {
       let repositionedCachedPositions = { ...cachedPositions };
-      const itemReflowDiff = [
-        item.x - item.originalX,
-        item.y - item.originalY
-      ];
+      const itemReflowDiff = [item.x - item.originalX, item.y - item.originalY];
       item.children = item.children.map((child) => repositionChildren(child, itemReflowDiff[0], itemReflowDiff[1]));
       if (item.children.length > 4) {
         if (item.depth > maxDepth)
@@ -19160,10 +19193,7 @@ var reflowSiblings = (siblings, cachedPositions = {}, maxDepth, parentRadius, pa
               childCachedPosition[1] + itemPositionDiffFromCached[1]
             ];
           } else {
-            repositionedCachedPositions[child.data.path] = [
-              child.x,
-              child.y
-            ];
+            repositionedCachedPositions[child.data.path] = [child.x, child.y];
           }
         });
         item.children = reflowSiblings(item.children, repositionedCachedPositions, maxDepth, item.r, [item.x, item.y]);
@@ -19186,7 +19216,7 @@ var getSortOrder = (item, cachedOrders, i = 0) => {
 
 // src/index.jsx
 var config = {
-  root_path: "~/code/next.js",
+  root_path: "/Users/mpham/code/platform/apps/kairos",
   max_depth: 9,
   color_encoding: "type",
   excluded_paths: "node_modules,bower_components,dist,out,build,eject,.next,.netlify,.yarn,.git,.vscode,package-lock.json,yarn.lock",
