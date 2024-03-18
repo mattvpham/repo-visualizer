@@ -9,13 +9,13 @@ import { processDir } from "./process-dir.js";
 import { Tree } from "./Tree.tsx";
 
 const config = {
-  root_path: '~/code/next.js',
   max_depth: 9,
   color_encoding: 'type',
   excluded_paths: "node_modules,bower_components,dist,out,build,eject,.next,.netlify,.yarn,.git,.vscode,package-lock.json,yarn.lock",
   excluded_globs: '',
   branch: 'main',
-  output_file: './diagram.svg',
+  root_path: process.argv[2] || '',
+  output_file: process.argv[3] || './diagram.svg',
 }
 
 const core = {
