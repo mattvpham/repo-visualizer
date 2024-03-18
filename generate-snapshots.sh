@@ -7,7 +7,7 @@ targetdir=$1
 cd $targetdir
 
 # Get all commit hashes with [ETD-*] in the commit message
-commits=$(git log --pretty=format:'%H' --grep='\[ETD-.*\]')
+commits=$(git log --pretty=format:'%H' --grep='\[ETD-.*\]' --reverse)
 
 counter=1
 # Loop over each commit
@@ -23,8 +23,9 @@ do
     echo "Commit $counter: $message"
 
     # Run your command here
-    echo "Running command on commit $commit"
-    # Replace the above echo command with your actual command
+    cd $currentdir
+    node index.js $targetdir/apps/kairos diagram$counter.svg
+    cd $targetdir
 
     # Increment counter
     ((counter++))
